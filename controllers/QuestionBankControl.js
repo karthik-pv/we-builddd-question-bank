@@ -1,13 +1,15 @@
 const QuestionBankModel = require('../Models/QuestionBankModel')
 const {QuestionAddJoi ,QuestionEditJoi ,QuestionSortJoi} = require('../Schema/QuestionBankJoi')
 const {default : mongoose} = require('mongoose')
-const {serverError , joiError ,mongooseIdError,successMessage} = require('../Utils/commonFuncs')
+const {serverError , joiError ,mongooseIdError,successMessage,multipleAnswerCheck} = require('../Utils/commonFuncs')
 
 
 module.exports.addQuestion = async(req,res) => {
     try{
         //get data from req body
-        const{subject,module,question,options,answer,isAnswerMultiple,level,value} = await QuestionAddJoi.validateAsync(req.body,{abortEarly:false})
+        const{subject,module,question,options,answer,level,value} = await QuestionAddJoi.validateAsync(req.body,{abortEarly:false})
+
+        isAnswerMultiple=multipleAnswerCheck(answer)
 
         const Question = new QuestionBankModel({subject,module,question,options,answer,isAnswerMultiple,level,value});
         
@@ -30,10 +32,12 @@ module.exports.editQuestion = async (req,res) => {
         const{id}  = req.params;
 
         //joi check of data 
-        const{subject,module,question,options,answer,isAnswerMultiple,level,value} = await QuestionEditJoi.validateAsync(req.body,{abortEarly:false})
+        const{subject,module,question,options,answer,level,value} = await QuestionEditJoi.validateAsync(req.body,{abortEarly:false})
         // check if valid id
         mongooseIdError(id,res)
 
+        isAnswerMultiple=multipleAnswerCheck(answer)
+        
         //update the question
         const NewQuestion = await QuestionBankModel.findByIdAndUpdate(id,{subject,module,question,options,answer,isAnswerMultiple,level,value},{new:true})
         

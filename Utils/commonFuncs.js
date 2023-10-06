@@ -33,5 +33,14 @@ function successMessage(res){
     })
 }
 
+function multipleAnswerCheck(answer,isAnswerMultiple){
+    if(answer.length>1){
+        return true
+    }
+    else{
+        return false
+    }
+}
 
-module.exports = {serverError,joiError,mongooseIdError,successMessage};
+
+module.exports = {serverError,joiError,mongooseIdError,successMessage,multipleAnswerCheck};

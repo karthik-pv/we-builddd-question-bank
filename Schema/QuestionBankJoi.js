@@ -12,8 +12,6 @@ const QuestionAddJoi = Joi.object({
 
     answer : Joi.array().required(), 
 
-    isAnswerMultiple : Joi.boolean().required(),
-
     level : Joi.number().min(1).max(3).required(),
 
     value : Joi.number().required()
@@ -31,8 +29,6 @@ const QuestionEditJoi = Joi.object({
     options : Joi.array(), 
 
     answer : Joi.array(), 
-
-    isAnswerMultiple : Joi.boolean(),
 
     level : Joi.number().min(1).max(3),
 
